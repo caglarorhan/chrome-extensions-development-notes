@@ -26,5 +26,27 @@ Follow these steps to create a chrome extension and add it to your browser:
 Buttons from right to left: 
 - **Update** button updates the extensions page (so the list of extensions, and extensions themselves).
 - **Pack Extension** button asks you the folder of specific (you choose) extension and compile it to **_.crx_** file. While doing this it asks for _**.pem**_ (private key) file, don't worry, it creates if you can't pick one. The important of pem file is to recompiling processes, you need it again if you would compile. You need same file again. I can suggest create a second folder to encapsulate these files.
+- **Load Unpacked** button let you add a folder (which includes manifest.json file) as chrome extension to your chrome browser. To test, develop, debug etc.
 
+These are the first basic steps to create empty, aimless, meaningless, useless chrome extension :)
+
+---
+Now, let us choose a purpose, for us, for the chrome extension we will develop.
+We can use all js, html, css and browser environment APIs etc in extensions. 
+You can find useful links down below (must have a look).
+
+
+
+
+
+
+
+
+
+
+---
+**_Links:_**
+- https://developers.chrome.com/extensions 
+- https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bL9VOMT65ahNEri9uqLWfS 
+- https://www.udemy.com/chrome-extension-dev/
 
