@@ -17,14 +17,14 @@ By the way you don't need to compile it (even Chrome browser can compile). Zip t
 After first manifest.json creation step with the basic informations above. 
 You can develop and test in your local with chrome browser.
 
-Follow these steps to create an chrome extension and add i to your browser:
+Follow these steps to create a chrome extension and add it to your browser:
 - Create a folder and put a simple manifest.json file like written above
-- Open a chrome browser and open extensions page (chrome://extensions/) Or open it from  _**Customize and Control Google Chrome**_ menu (tri dots on a row, at the most right top of Chrome window) ⇒ More Tools ⇒ Extensions 
-- On this Extensions page activate Developer mode with switch on the upper right corner.
-- When you switch-on the developer mode you can see every extensions has unique ID. And a menu appears on top which inludes 3 buttons. 
+- Open a chrome browser and open extensions page (chrome://extensions/) Or open it from  _**Customize and Control Google Chrome**_ menu (three dots on a row, at the most right top of Chrome window) ⇒ More Tools ⇒ Extensions 
+- On this Extensions page, activate Developer mode from the switch (upper right corner).
+- When you switch-on the developer mode you can see every extensions has unique ID. And a menu appears on top, which includes 3 buttons. 
 
-From right to left: 
+Buttons from right to left: 
 - **Update** button updates the extensions page (so the list of extensions, and extensions themselves).
-- **Pack Extension** button asks you the folder of spesific (you choose) extension and compile it to **_.crx_** file. While doing this it asks for _**.pem**_ (provate key) file
+- **Pack Extension** button asks you the folder of specific (you choose) extension and compile it to **_.crx_** file. While doing this it asks for _**.pem**_ (private key) file, don't worry, it creates if you can't pick one. The important of pem file is to recompiling processes, you need it again if you would compile. You need same file again. I can suggest create a second folder to encapsulate these files.
 
 
