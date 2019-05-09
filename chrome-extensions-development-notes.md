@@ -2,7 +2,7 @@
 
 05/08/2019, Caglar Orhan, Santa Clara /CA
 
-There is only one base file to set a chrome extension. This is manifest file and it is json formatted. (_manifest.json_). In this json, **_manifest_version_** must 2 and must not change!
+There is only one base file to set a chrome extension. This is manifest file and it is json formatted. (_manifest.json_). In this json, **_manifest_version_** must 2 and must not change! (v3 is on its way)...
 
     {
         "name": "My Chrome Extension",
@@ -84,7 +84,7 @@ These icons are used in browser, extensions page and web store pages etc..
 **Background** 
 
     "background" : { "scripts" : ["./js/background.js"] },
-When extension installed on the background you can do something with javascript. For example: send request to APIs, calculate something, listening opened web pages etc. These files must listed in this section.
+When extension installed, on the background you can do something with javascript. For example: send request to APIs, calculate something, listening opened web pages etc. These files must listed in this section. To use any script at the background you need to add the script to the array as shown above. The second property of background is ``persistent`` .If its value is ``false`` page is an ``event page`` else if its value is ``true`` it is ``background page``.
  
 
 
@@ -111,8 +111,8 @@ _**JS Note:**_ ``close()`` command in javascript of options page, closes the ope
 **Notifications**
 
 A notification is classical chrome notification which arises from right bottom corner of the window. This action must be declared in permissions section inside manifest.json file (check the permissions header).
-After adding notifications to permissions keys value section you can use Notifications API.
-There are types, methods and events on this API. Basically create a notification object and give it to the notifications create method.
+After adding notifications to permissions array, you can use Notifications API.
+There are types, methods and events on this API. Basically create a notification object and give it to the notifications create method with a given name.
 
     var notifOptions = {
                         type: 'basic',
@@ -125,10 +125,40 @@ There are types, methods and events on this API. Basically create a notification
 (https://developers.chrome.com/extensions/notifications)
 
 ---
+**Context Menu**
 
+First add to the background section into the manifest file 
+
+    "background": {
+                    "scripts": ["eventPage.js"],
+                    "persistent": false 
+    }
+after that, add ``contextMenus`` to the ``permissions`` array.
+
+Now write into the ``eventPage.js`` and create an object first.
+
+    var contextMenuItem = {
+    "id": "chooseYourOwnId",
+    "title": "choose your own title",
+    "context": ["selection"]
+    }
+ And give this object to the ``contextMenus`` APIs ``create`` method.
+ ``chrome.contextMenus.create(contextMenuItem)`` in the value of  ``context`` key is an Array and specify which content click would triggering the contextmenu. You can write ``"all"`` for all types of contents, or add from the list ``"all", "page", "frame", "selection", "link", "editable", "image", "video", "audio", "launcher", "browser_action", or "page_action"``.
+ 
+ After setting contextmenu, you should add a listener for click action to set another actions with the page content etc.
+ 
+    chrome.contextMenus.onClicked.addListener(function(clickedData){
+        if(clickedData.menuItemId ==="chooseYourOwnId" && clickedData.selectionText) 
+    })
+    
+`selectionText` is changing the context you choose.
+ 
+ You can glance over https://developers.chrome.com/extensions/contextMenus    
     
     
-    
+---
+
+
 
 
 
