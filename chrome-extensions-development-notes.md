@@ -159,7 +159,7 @@ Now write into the ``eventPage.js`` and create an object first.
 ---
 
 
-
+**Note:**  All API processes are pushed into callback queue, after callback stack emptied event loop push them into call stack. Because of this asynchronous work flow you should plan your code logic carefully.
 
 
 **...to be continued...**
