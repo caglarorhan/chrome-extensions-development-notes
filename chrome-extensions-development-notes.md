@@ -41,7 +41,7 @@ Before we start to develop lets have a look over main manifest file parts...
 Most important part of Chrome Extension is the _**manifest.json**_ file.
 All configurations, permissions, specifications, file locations and options created and defined in this file.
 
-Some of the main parts of **manifest.json** file:
+Some of the main parts of **manifest.json** file and other extension notes:
 
 **Browser Actions** 
 
@@ -52,7 +52,9 @@ Some of the main parts of **manifest.json** file:
     }
  
 _**default_popup**_ is the target page that pops up when you click the extensions icon in browser.
+
 _**default_title**_ is the title when you move your mouse and wait over the icon of your extension
+
 _**default_icon**_ is the 16x16 pixels dimension of a png icon of your extension which is sits right upper corner of your chrome browser 
 (https://developers.chrome.com/extensions/browserAction)
 
@@ -63,6 +65,7 @@ _**default_icon**_ is the 16x16 pixels dimension of a png icon of your extension
     "permissions": ["declarativeContent","storage","notifications", "contextMenu"],
 
 Extensions needs permissions to reach browser API system. Storage for local storages, notifications for standard notifications (rise up from right bottom, you know), contextMenu as is, right mouse click opened menu on any web page.
+(https://developers.chrome.com/extensions/declare_permissions)
 
 **Icons**
 
@@ -78,11 +81,51 @@ Extensions needs permissions to reach browser API system. Storage for local stor
       
 These icons are used in browser, extensions page and web store pages etc..    
       
+**Background** 
+
+    "background" : { "scripts" : ["./js/background.js"] },
+When extension installed on the background you can do something with javascript. For example: send request to APIs, calculate something, listening opened web pages etc. These files must listed in this section.
+ 
+
+
+**Options Page**
+
+Option page is a kind of extensions configuration page. This is only one page that you can design whatever you like. But as its name tells generally used for options. User can reach the options page with right clicking the extensions icon and select Options option from the context menu. And your options page opens in a new tab. Address will be like this
+ ``chrome-extension://oefphpcpamajoaakdopblifhfneealbi/yourOptionsPageName.html``
+ 
+To create options page first add a key-value in manifest file.
+
+    "options": "yourOptionsPageName.html"
+
+After preparing your `yourOptionsPageName.html` it is ready to go. You can use css, html and javascript in this html page.
+
+_**JS Note:**_ ``close()`` command in javascript of options page, closes the opened options page tab.
 
 
 
 
-    
+
+--- 
+
+
+**Notifications**
+
+A notification is classical chrome notification which arises from right bottom corner of the window. This action must be declared in permissions section inside manifest.json file (check the permissions header).
+After adding notifications to permissions keys value section you can use Notifications API.
+There are types, methods and events on this API. Basically create a notification object and give it to the notifications create method.
+
+    var notifOptions = {
+                        type: 'basic',
+                        iconUrl: 'icon48.png',
+                        title: 'Baslik',
+                        message: 'Mesaj metni'
+                        }
+    chrome.notifications.create('notificationID',notifOptions)
+            
+(https://developers.chrome.com/extensions/notifications)
+
+---
+
     
     
     
