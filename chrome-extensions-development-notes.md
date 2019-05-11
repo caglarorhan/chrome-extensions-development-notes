@@ -20,7 +20,7 @@ You can develop and test in your local with chrome browser.
 
 Follow these steps to create a chrome extension and add it to your browser:
 - Create a folder and put a simple manifest.json file like written above
-- Open a chrome browser and open extensions page (chrome://extensions/) Or open it from  _**Customize and Control Google Chrome**_ menu (three dots on a row, at the most right top of Chrome window) ⇒ More Tools ⇒ Extensions 
+- Open a chrome browser and open extensions page (chrome://extensions/) Or open it from  _**Customize and Control Google Chrome**_ menu (three dots on a column, at the most right top of Chrome window) ⇒ More Tools ⇒ Extensions 
 - On this Extensions page, activate Developer mode from the switch (upper right corner).
 - When you switch-on the developer mode you can see every extensions has unique ID. And a menu appears on top, which includes 3 buttons. 
 
@@ -86,6 +86,26 @@ These icons are used in browser, extensions page and web store pages etc..
     "background" : { "scripts" : ["./js/background.js"] },
 When extension installed, on the background you can do something with javascript. For example: send request to APIs, calculate something, listening opened web pages etc. These files must listed in this section. To use any script at the background you need to add the script to the array as shown above. The second property of background is ``persistent`` .If its value is ``false`` page is an ``event page`` else if its value is ``true`` it is ``background page``.
  
+**Content_Scripts**
+
+These scripts added automatically to every page visited. This scripts can reach DOM and page properties. This scripts communicate with background and popup via chrome message API.
+
+      "content_scripts": [
+        {
+          "matches": ["https://developer.chrome.com/*"],
+          "js": ["./js/content.js","./js/jquery-3.4.1.min.js"],
+          "css":["./css/content.css"]
+        }
+      ]
+- Sending message to background/popup with ``chrome.runtime.sendMessage({anyMessageId:"AnyValue"})``;
+- And listening any messages coming from background/popup with,
+
+
+    chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
+        if(request.anyMessageId == "AnyValue"){
+            // if any message cames, check the value if it is our expected message than goes on.
+        }
+    })
 
 
 **Options Page**
@@ -151,7 +171,7 @@ Now write into the ``eventPage.js`` and create an object first.
         if(clickedData.menuItemId ==="chooseYourOwnId" && clickedData.selectionText) 
     })
     
-`selectionText` is changing the context you choose.
+`selectionText` is depend on the context you choose.
  
  You can glance over https://developers.chrome.com/extensions/contextMenus    
     
@@ -159,17 +179,61 @@ Now write into the ``eventPage.js`` and create an object first.
 ---
 
 
-**Note:**  All API processes are pushed into callback queue, after callback stack emptied event loop push them into call stack. Because of this asynchronous work flow you should plan your code logic carefully.
+**Important Note:**  All **API** processes are pushed into ``callback queue``, after ``callback stack`` emptied, event loop pushes them into ``call stack``. Because of this ``asynchronous work flow`` you should plan your code logic carefully.
 
 
 **...to be continued...**
  
 
+---
+***random notes:***
+
+Content Script --Msg(Do something with API)--> Event Page
+
+Content Script <--Msg(change something in DOM)-- Popup Script
+
+Burada Content Script sayfanin tarafi ve manifest.json icinde content_script bolumunde belirtiliyorlar. DOM a erisimi var ama cogu Chrome APIsine erisimi yok. Extension aktifse her sayfaya gomulurler. Sayfanin kendi source kodu gibi gorulurler.
+
+Event Page ise (aslinda js) browser(program) tarafi. Tum APIlere erisimi var ama DOM ve sayfaya erisimi yok.
+
+Popup script de arkada calisabilir (popup icinde de calisir) DOM erisimi yoktur.
+
+Content script ile Event page arasinda mesajlarla iletisim kurulur ve isler birbirlerine yaptirilabilir
+
+ayni sekilde Content script ile popup script arasindaki iletisim de mesajlar araciligiyla kurulur.
+
+Mesaj yollama ``chrome.runtime.sendMessage({todo:"showPageAction"});`` orneginde oldugu gibidir.
+
+**manifest.json** icinde belirtilen content_scripts bolumunun js bolumleri sadece ayni bolumdeki matches url lerinde otomatik calisir. Ayni sekilde content_script bolumundeki css de otomatik calisir.
+
+      "content_scripts": [
+        {
+          "matches": ["https://developer.chrome.com/*"],
+          "js": ["./js/content.js","./js/jquery-3.4.1.min.js"],
+          "css":["./css/content.css"]
+        }
+      ]
+
+content scriptler API lere (eventPage ve popup tarafi) ulasamadigindan isteklerini mesajlarla iletir. API tarafi bu mesajin geldigini su sekilde takip eder ve icerigini alir:
 
 
+    chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
+        if(request.todo == "showPageAction"){ 
+        //request ile mesaj geliyor birden fazla mesaj olabileceginden kontrol ediliyor
+            API tarafinda gelen mesaja gore islem burada yapiliyor.
+    }
+    })
 
+content scriptler belirli bir uri icin sartlanmadilarsa her web sayfasinin icine gomulurler.
 
+---
+**DeBugging**
 
+EventPages scripts can be debugged from ``chrome://extensions/`` and under extensions card ``background page`` link opens the page which includes js and other files. There you can debug js files.
+
+Option pages and Popups scripts can be debugged from itself after opening them.
+
+Content scripts can be debugged from any web page like any other web page source while extension is activated.
 
 
 
