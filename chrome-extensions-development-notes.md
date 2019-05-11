@@ -85,6 +85,7 @@ These icons are used in browser, extensions page and web store pages etc..
 
     "background" : { "scripts" : ["./js/background.js"] },
 When extension installed, on the background you can do something with javascript. For example: send request to APIs, calculate something, listening opened web pages etc. These files must listed in this section. To use any script at the background you need to add the script to the array as shown above. The second property of background is ``persistent`` .If its value is ``false`` page is an ``event page`` else if its value is ``true`` it is ``background page``.
+(https://developers.chrome.com/extensions/background_pages)
  
 **Content_Scripts**
 
@@ -97,6 +98,7 @@ These scripts added automatically to every page visited. This scripts can reach 
           "css":["./css/content.css"]
         }
       ]
+      
 - Sending message to background/popup with ``chrome.runtime.sendMessage({anyMessageId:"AnyValue"})``;
 - And listening any messages coming from background/popup with,
 
@@ -106,6 +108,17 @@ These scripts added automatically to every page visited. This scripts can reach 
             // if any message cames, check the value if it is our expected message than goes on.
         }
     })
+
+**Web Accessible Resources**
+
+          "web_accessible_sources": [
+                                    "images/*.png",
+                                    "style/double-rainbow.css",
+                                    "script/double-rainbow.js",
+                                    "script/main.js",
+                                    "templates/*"    
+                                    ]
+Please have a look for content_scripts:  https://developer.chrome.com/extensions/manifest/web_accessible_resources   
 
 
 **Options Page**
@@ -204,6 +217,15 @@ ayni sekilde Content script ile popup script arasindaki iletisim de mesajlar ara
 
 Mesaj yollama ``chrome.runtime.sendMessage({todo:"showPageAction"});`` orneginde oldugu gibidir.
 
+Ayrica bak Mesaj yollama ``chrome.tabs.sendMessage(tab.id, {todo:"showPageAction"});`` orneginde oldugu gibide kullanilir.``
+
+**extension dosyalarindan herhangi birisinin yolunu alma** 
+
+**onemli not:** dosya adi dosya klasorun icindeyse dosya adini da iceren goreceli yoldur. Ornegin: ``resimler/resimA.jpg`` gibi 
+
+    let dosyaAdi="resimler/resimA.jpg";
+    let dosyaYolu = chrome.extension.getURL(dosyaadi);
+
 **manifest.json** icinde belirtilen content_scripts bolumunun js bolumleri sadece ayni bolumdeki matches url lerinde otomatik calisir. Ayni sekilde content_script bolumundeki css de otomatik calisir.
 
       "content_scripts": [
@@ -213,7 +235,7 @@ Mesaj yollama ``chrome.runtime.sendMessage({todo:"showPageAction"});`` orneginde
           "css":["./css/content.css"]
         }
       ]
-
+css ve js dosyalarinin dizi icindeki siralamalari onemlidir. Yer aldiklari siraya gore sayfaya injecte edilirler.
 content scriptler API lere (eventPage ve popup tarafi) ulasamadigindan isteklerini mesajlarla iletir. API tarafi bu mesajin geldigini su sekilde takip eder ve icerigini alir:
 
 
@@ -225,6 +247,14 @@ content scriptler API lere (eventPage ve popup tarafi) ulasamadigindan istekleri
     })
 
 content scriptler belirli bir uri icin sartlanmadilarsa her web sayfasinin icine gomulurler.
+
+Backgroundpage (background script) browser acildiginda aktive olur ve calismaya/dinlemeye baslar
+
+---
+**Extras**
+
+In first area of manifest file you can add a shortcut for ``omnibox`` (address bar) with ``"omnibox": { "keyword" : "sample-keyword" },`` 
+After adding this part any user can write ``sample-keyword`` on to address bar and get effect like clicking the extensions icon.
 
 ---
 **DeBugging**
