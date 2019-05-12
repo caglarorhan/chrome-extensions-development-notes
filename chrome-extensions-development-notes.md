@@ -3,6 +3,7 @@
 05/08/2019, Caglar Orhan, Santa Clara /CA
 
 **Head note :** Before starting, cross-browser extensions (_**WebExtensions**_) are working in all popular browsers. You can find better (actually the best) source from here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+``And possibly almost all chrome extensions would run in Firefox (add-on) with any change because of API standardisation.``
 
 There is only one base file to set a chrome extension. This is manifest file and it is json formatted. (_manifest.json_). In this json, **_manifest_version_** must 2 and must not change! (v3 is on its way)...
 
