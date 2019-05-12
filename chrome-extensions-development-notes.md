@@ -2,6 +2,8 @@
 
 05/08/2019, Caglar Orhan, Santa Clara /CA
 
+**Head note :** Before starting, cross-browser extensions (_**WebExtensions**_) are working in all popular browsers. You can find better (actually the best) source from here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+
 There is only one base file to set a chrome extension. This is manifest file and it is json formatted. (_manifest.json_). In this json, **_manifest_version_** must 2 and must not change! (v3 is on its way)...
 
     {
@@ -46,7 +48,8 @@ Some of the main parts of **manifest.json** file and other extension notes:
 **Browser Actions** 
 
     "browser_action": 
-    {"default_popup": "index.html",
+    {
+    "default_popup": "index.html",
     "default_title": "My GitHub",
     "default_icon": "./img/mygithub_16.png"
     }
@@ -214,10 +217,16 @@ Popup script de arkada calisabilir (popup icinde de calisir) DOM erisimi yoktur.
 Content script ile Event page arasinda mesajlarla iletisim kurulur ve isler birbirlerine yaptirilabilir
 
 ayni sekilde Content script ile popup script arasindaki iletisim de mesajlar araciligiyla kurulur.
+MEsaj nesnesinin en azindan bir adet ``txt`` adinda key'i olmalidir.
+
+    let message = {txt: "herhangi bir metin"}
+    
+Oneri: txt degeri olan metin stringfy edilmis bir json da olabilir/
 
 Mesaj yollama ``chrome.runtime.sendMessage({todo:"showPageAction"});`` orneginde oldugu gibidir.
 
 Ayrica bak Mesaj yollama ``chrome.tabs.sendMessage(tab.id, {todo:"showPageAction"});`` orneginde oldugu gibide kullanilir.``
+Tabs API si icin mutlaka bakin: https://developer.chrome.com/extensions/tabs
 
 **extension dosyalarindan herhangi birisinin yolunu alma** 
 
@@ -251,6 +260,20 @@ content scriptler belirli bir uri icin sartlanmadilarsa her web sayfasinin icine
 Backgroundpage (background script) browser acildiginda aktive olur ve calismaya/dinlemeye baslar
 
 ---
+
+Aktif olan chrome tabini alip bir fonksiyona gondermek icin
+``chrome.tabs.getCurrent(callBack)`` kullanilir. **UYARI:** Background script ve popup scriptlerinde bu calismaz veya tab undefined duruma dusebilir! Bu durumda ``chrome.tabs.query(object queryInfo, function callback)`` kullanilmalidir. 
+``queryInfo`` bir nesnedir. ``{active:true, currentWindow:true}`` currentWindow icin mutlaka suraya bakmali: https://developer.chrome.com/extensions/windows#current-window 
+Dondurulmek istenen tab her zaman aktif olan veya en ustte yer alan tab olmayabilir. Uygulamanin calistigi (content scriptin yer aldigi) tab baska bir yerde olabilir!
+
+
+---
+manifest.json dosyasindaki ilk bolume bir override komutu ekleyebiliriz. Boylece chrome defaultlarinin uzerine yazabiliyoruz.
+
+    "chrome_url_overrides" : {
+                                "newtab":"bizimHtmlSayfasi.html"
+                                }
+---
 **Extras**
 
 In first area of manifest file you can add a shortcut for ``omnibox`` (address bar) with ``"omnibox": { "keyword" : "sample-keyword" },`` 
@@ -265,12 +288,15 @@ Option pages and Popups scripts can be debugged from itself after opening them.
 
 Content scripts can be debugged from any web page like any other web page source while extension is activated.
 
+**About Safety**
 
+Critical, must read: https://developer.chrome.com/extensions/security
 
 ---
 **_Links:_**
 - https://developers.chrome.com/extensions 
 - https://developers.chrome.com/extensions/devguide
 - https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bL9VOMT65ahNEri9uqLWfS 
+- https://shiffman.net/a2z/chrome-ext/
 - https://www.udemy.com/chrome-extension-dev/
 
